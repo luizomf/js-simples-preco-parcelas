@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    body, input, button {
+      font-family: sans-serif;
+      font-size: 20px;
+    }
+
+    .resultado {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <p>Produto custa <input type="text" class="preco" />:</p>
+  <p>Valor da primeira parcela <input type="text" class="primeira-parcela" />:</p>
+  
+  <p>
+    Selecione o número de parcelas
+    <select class="parcelas">
+      <option value="1">1x</option>
+      <option value="2">2x</option>
+      <option value="3">3x</option>
+      <option value="4">4x</option>
+      <option value="5">5x</option>
+      <option value="6">6x</option>
+      <!-- ADICIONE QUANTAS PARCELAS PRECISAR -->
+    </select>
+  </p>
+
+  <div class="resultado"></div>
+ 
+   <script>
+  (function() {
+    const precoInput = document.querySelector('.preco');
+    const primeiraParcelaInput = document.querySelector('.primeira-parcela');
+    const parcelasSelect = document.querySelector('.parcelas');
+    
+    document.addEventListener('change', function(e) {
+      verificaValores(e);
+    });
+
+    function verificaValores(e) {
+      const preco = Number(precoInput.value);
+      const primeiraParcela = Number(primeiraParcelaInput.value);
+      const qtdParcelas = Number(parcelasSelect.value);
+
+      // Só calcula se todos os valores estiverem corretos
+      if (!preco) return;
+      if (!primeiraParcela) return;
+      if (!qtdParcelas) return;
+            
+      calcula(preco, primeiraParcela, qtdParcelas);
+    }
+
+    function calcula(preco, primeiraParcela, qtdParcelas) {
+      const restoParcelas = preco - primeiraParcela;
+      const parcelas = restoParcelas / qtdParcelas;
+
+      const dados = {
+        preco, 
+        primeiraParcela, 
+        qtdParcelas,
+        parcelas
+      }
+      
+      renderiza(dados);
+    }
+
+    function formataPreco(preco) {
+      const formato = { 
+        minimumFractionDigits: 2 , 
+        style: 'currency', 
+        currency: 'BRL' 
+      };
+
+      return preco.toLocaleString('pt-BR', formato);
+    }
+
+    function renderiza(dados) {
+      const resultado = document.querySelector('.resultado');
+
+      resultado.innerHTML = `Preço do produto: ${formataPreco(dados.preco)} <br />`;
+      resultado.innerHTML += `Primeira parcela: ${formataPreco(dados.primeiraParcela)} <br />`;
+      resultado.innerHTML += `Restante das parcelas: ${dados.qtdParcelas}x `;
+      resultado.innerHTML += `de ${formataPreco(dados.parcelas)} <br />`;
+    }
+  })();
+  </script>
+
+</body>
+</html>
